@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хімія і життя людини | Інтерактивний проєкт</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 80px 20px 60px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .logo {
+            font-size: 72px;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #fff, #ffd89b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 22px;
+            opacity: 0.9;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* Navigation tabs */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 15px 35px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            border-color: transparent;
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+        }
+
+        /* Content sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: 0.6s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .card-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #ffd89b;
+        }
+
+        .card-text {
+            font-size: 16px;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+
+        /* Expandable sections */
+        .expandable {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .expandable:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .expandable-header {
+            padding: 25px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .expandable-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .expandable-icon {
+            font-size: 28px;
+            transition: transform 0.3s ease;
+        }
+
+        .expandable.open .expandable-icon {
+            transform: rotate(180deg);
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 30px;
+        }
+
+        .expandable.open .expandable-content {
+            max-height: 2000px;
+            padding: 0 30px 30px 30px;
+        }
+
+        .expandable-text {
+            font-size: 16px;
+            line-height: 1.9;
+            opacity: 0.9;
+        }
+
+        .expandable-text ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        .expandable-text li {
+            margin: 10px 0;
+            line-height: 1.7;
+        }
+
+        .expandable-text strong {
+            color: #ffd89b;
+        }
+
+        /* Chemical elements showcase */
+        .elements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .element {
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .element:hover {
+            transform: translateY(-8px) rotate(2deg);
+            border-color: #ffd89b;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .element-symbol {
+            font-size: 48px;
+            font-weight: 900;
+            color: #ffd89b;
+            margin-bottom: 10px;
+        }
+
+        .element-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .element-info {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Info boxes */
+        .info-box {
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.2), rgba(245, 87, 108, 0.2));
+            backdrop-filter: blur(15px);
+            border-left: 5px solid #f5576c;
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .info-box h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #ffd89b;
+        }
+
+        .info-box p {
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .stat-number {
+            font-size: 52px;
+            font-weight: 900;
+            color: #ffd89b;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 50px 20px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 38px; }
+            .subtitle { font-size: 16px; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .nav-tabs { gap: 10px; }
+            .tab { padding: 12px 25px; font-size: 14px; }
+        }
+
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">⚗️</div>
+            <h1>Хімія і життя людини</h1>
+            <p class="subtitle">Інтерактивний проєкт про роль хімії в нашому житті</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <div class="tab active" onclick="showSection('intro')">🏠 Вступ</div>
+            <div class="tab" onclick="showSection('body')">🧬 Хімія тіла</div>
+            <div class="tab" onclick="showSection('food')">🍎 Їжа і напої</div>
+            <div class="tab" onclick="showSection('medicine')">💊 Медицина</div>
+            <div class="tab" onclick="showSection('everyday')">🏡 Побут</div>
+            <div class="tab" onclick="showSection('conclusion')">📊 Висновки</div>
+        </nav>
+
+        <!-- INTRO SECTION -->
+        <div class="content-section active" id="intro">
+            <div class="info-box">
+                <h3>🎯 Мета проєкту</h3>
+                <p>Дослідити та продемонструвати важливість хімії в повсякденному житті людини, показати як хімічні процеси та речовини впливають на наше здоров'я, харчування, побут та медицину.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <span class="card-icon">🔬</span>
+                    <h3 class="card-title">Наука життя</h3>
+                    <p class="card-text">Хімія — це наука про речовини, їх склад, будову, властивості та перетворення. Вона оточує нас повсюди і є основою життя на Землі.</p>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🌟</span>
+                    <h3 class="card-title">Щоденний вплив</h3>
+                    <p class="card-text">Від ранкового пробудження до вечірнього сну — хімічні процеси супроводжують кожну мить нашого життя, часто залишаючись непоміченими.</p>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">💡</span>
+                    <h3 class="card-title">Майбутнє</h3>
+                    <p class="card-text">Розуміння хімії допомагає приймати усвідомлені рішення про своє здоров'я, харчування та вплив на навколишнє середовище.</p>
+                </div>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">60%</div>
+                    <div class="stat-label">води у людському тілі</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">37</div>
+                    <div class="stat-label">трильйонів клітин у тілі</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">118</div>
+                    <div class="stat-label">хімічних елементів відкрито</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25</div>
+                    <div class="stat-label">елементів у людському тілі</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BODY CHEMISTRY SECTION -->
+        <div class="content-section" id="body">
+            <h2 style="font-size: 42px; margin-bottom: 30px; text-align: center;">🧬 Хімія людського тіла</h2>
+
+            <div class="elements-grid">
+                <div class="element">
+                    <div class="element-symbol">O</div>
+                    <div class="element-name">Оксиген</div>
+                    <div class="element-info">65% маси тіла</div>
+                </div>
+                <div class="element">
+                    <div class="element-symbol">C</div>
+                    <div class="element-name">Карбон</div>
+                    <div class="element-info">18% маси тіла</div>
+                </div>
+                <div class="element">
+                    <div class="element-symbol">H</div>
+                    <div class="element-name">Гідроген</div>
+                    <div class="element-info">10% маси тіла</div>
+                </div>
+                <div class="element">
+                    <div class="element-symbol">N</div>
+                    <div class="element-name">Нітроген</div>
+                    <div class="element-info">3% маси тіла</div>
+                </div>
+                <div class="element">
+                    <div class="element-symbol">Ca</div>
+                    <div class="element-name">Кальцій</div>
+                    <div class="element-info">1.5% маси тіла</div>
+                </div>
+                <div class="element">
+                    <div class="element-symbol">P</div>
+                    <div class="element-name">Фосфор</div>
+                    <div class="element-info">1% маси тіла</div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>💪 Білки — будівельний матеріал організму</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p><strong>Білки (протеїни)</strong> — це складні органічні сполуки, побудовані з амінокислот. Вони виконують безліч функцій:</p>
+                        <ul>
+                            <li><strong>Структурна:</strong> колаген у шкірі, кератин у волоссі та нігтях</li>
+                            <li><strong>Каталітична:</strong> ферменти прискорюють хімічні реакції у тисячі разів</li>
+                            <li><strong>Транспортна:</strong> гемоглобін переносить кисень до клітин</li>
+                            <li><strong>Захисна:</strong> антитіла борються з інфекціями</li>
+                            <li><strong>Регуляторна:</strong> гормони керують процесами у організмі</li>
+                        </ul>
+                        <p>Людині потрібно отримувати близько 20 різних амінокислот, 9 з яких є незамінними і повинні надходити з їжею.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>⚡ Енергія клітин — АТФ</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p><strong>Аденозинтрифосфат (АТФ)</strong> — універсальна енергетична валюта клітини.</p>
+                        <ul>
+                            <li>Утворюється в мітохондріях при окисненні глюкози</li>
+                            <li>Одна молекула глюкози дає 36-38 молекул АТФ</li>
+                            <li>Щодня людина синтезує масу АТФ, рівну своїй власній вазі</li>
+                            <li>Кожна клітина постійно "спалює" і відновлює АТФ</li>
+                        </ul>
+                        <p><strong>Процес дихання:</strong> C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + енергія (АТФ)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🧪 Гормони — хімічні месенджери</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p>Гормони — це хімічні речовини, які виробляються залозами внутрішньої секреції та регулюють всі процеси в організмі:</p>
+                        <ul>
+                            <li><strong>Інсулін</strong> — контролює рівень глюкози в крові</li>
+                            <li><strong>Адреналін</strong> — гормон стресу, підготовляє тіло до дії</li>
+                            <li><strong>Серотонін</strong> — "гормон щастя", регулює настрій</li>
+                            <li><strong>Тироксин</strong> — контролює обмін речовин</li>
+                            <li><strong>Тестостерон і естроген</strong> — статеві гормони</li>
+                        </ul>
+                        <p>Навіть малі зміни у концентрації гормонів можуть суттєво впливати на самопочуття та здоров'я.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🩸 Кров — рідка тканина організму</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p>Кров — це складна хімічна система, яка виконує життєво важливі функції:</p>
+                        <ul>
+                            <li><strong>Транспортна:</strong> переносить кисень, поживні речовини, гормони</li>
+                            <li><strong>Захисна:</strong> лейкоцити борються з інфекціями</li>
+                            <li><strong>Регуляторна:</strong> підтримує температуру та pH організму</li>
+                            <li><strong>Гемостатична:</strong> зупиняє кровотечі завдяки тромбоцитам</li>
+                        </ul>
+                        <p><strong>pH крові</strong> підтримується на рівні 7.35-7.45 завдяки буферним системам. Навіть невелике відхилення може бути небезпечним.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOD SECTION -->
+        <div class="content-section" id="food">
+            <h2 style="font-size: 42px; margin-bottom: 30px; text-align: center;">🍎 Хімія їжі та напоїв</h2>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <span class="card-icon">🍞</span>
+                    <h3 class="card-title">Вуглеводи</h3>
+                    <p class="card-text">Основне джерело енергії. Глюкоза, фруктоза, сахароза — прості вуглеводи. Крохмаль, целюлоза — складні. При травленні розщеплюються на глюкозу.</p>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🥑</span>
+                    <h3 class="card-title">Жири (ліпіди)</h3>
+                    <p class="card-text">Концентроване джерело енергії (9 ккал/г). Насичені та ненасичені жирні кислоти. Омега-3 та Омега-6 — незамінні для здоров'я.</p>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🥩</span>
+                    <h3 class="card-title">Білки</h3>
+                    <p class="card-text">Будівельний матеріал клітин. Складаються з амінокислот. Тваринні та рослинні білки мають різний амінокислотний склад.</p>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🧂 Мінеральні речовини</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p>Мінерали необхідні для нормального функціонування організму:</p>
+                        <ul>
+                            <li><strong>Натрій (Na) та Калій (K)</strong> — регулюють водно-сольовий баланс, передачу нервових імпульсів</li>
+                            <li><strong>Кальцій (Ca)</strong> — міцність кісток і зубів, згортання крові, м'язові скорочення</li>
+                            <li><strong>Залізо (Fe)</strong> — входить до складу гемоглобіну, переносить кисень</li>
+                            <li><strong>Йод (I)</strong> — необхідний для синтезу гормонів щитовидної залози</li>
+                            <li><strong>Магній (Mg)</strong> — бере участь у 300+ ферментативних реакціях</li>
+                            <li><strong>Цинк (Zn)</strong> — імунітет, заживлення ран, синтез білка</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🍊 Вітаміни — каталізатори життя</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p><strong>Вітаміни</strong> — органічні сполуки, необхідні в малих кількостях для нормального метаболізму:</p>
+                        <ul>
+                            <li><strong>Вітамін C (аскорбінова кислота)</strong> — антиоксидант, синтез колагену, імунітет</li>
+                            <li><strong>Вітамін D (кальциферол)</strong> — засвоєння кальцію, здоров'я кісток</li>
+                            <li><strong>Вітамін A (ретинол)</strong> — зір, шкіра, ріст клітин</li>
+                            <li><strong>Вітаміни групи B</strong> — енергетичний обмін, нервова система</li>
+                            <li><strong>Вітамін E (токоферол)</strong> — потужний антиоксидант</li>
+                            <li><strong>Вітамін K</strong> — згортання крові</li>
+                        </ul>
+                        <p>Авітаміноз (нестача вітамінів) призводить до серйозних захворювань: цинга (C), рахіт (D), "куряча сліпота" (A).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🥤 Хімія напоїв</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <ul>
+                            <li><strong>Вода (H₂O)</strong> — універсальний розчинник, основа життя. Людині потрібно 1.5-2 літри щодня.</li>
+                            <li><strong>Чай та кава</strong> — містять кофеїн (C₈H₁₀N₄O₂), стимулятор нервової системи. Також мають антиоксиданти.</li>
+                            <li><strong>Солодкі напої</strong> — містять багато цукру (сахарози). Одна банка коли = 7-10 ложок цукру!</li>
+                            <li><strong>Алкоголь (етанол C₂H₅OH)</strong> — токсична речовина, впливає на нервову систему. Метаболізується в печінці, перетворюється на ацетальдегід.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🍪 Харчові добавки</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p>Харчові добавки (Е-коди) — хімічні речовини, що додаються до продуктів:</p>
+                        <ul>
+                            <li><strong>E100-E199</strong> — барвники (надають колір)</li>
+                            <li><strong>E200-E299</strong> — консерванти (продовжують термін зберігання)</li>
+                            <li><strong>E300-E399</strong> — антиоксиданти (запобігають окисленню)</li>
+                            <li><strong>E400-E499</strong> — стабілізатори, загусники</li>
+                            <li><strong>E500-E599</strong> — регулятори кислотності</li>
+                        </ul>
+                        <p>Не всі Е-добавки шкідливі! Наприклад, E300 — це вітамін C, E101 — вітамін B2. Проте деякі можуть викликати алергії.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MEDICINE SECTION -->
+        <div class="content-section" id="medicine">
+            <h2 style="font-size: 42px; margin-bottom: 30px; text-align: center;">💊 Хімія в медицині</h2>
+
+            <div class="info-box">
+                <h3>⚕️ Фармацевтична хімія</h3>
+                <p>Розробка ліків — це складний хімічний процес. Кожен препарат проходить багаторічні дослідження перед виходом на ринок. Хімія дозволяє створювати молекули, які цілеспрямовано впливають на хвороби.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <span class="card-icon">💉</span>
+                    <h3 class="card-title">Антибіотики</h3>
+                    <p class="card-text">Пеніцилін, стрептоміцин — речовини, що вбивають бактерії. Відкриття антибіотиків врятувало мільйони життів. Діють на клітинну стінку бактерій.</p>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">😌</span>
+                    <h3 class="card-title">Знеболюючі</h3>
+                    <p class="card-text">Аспірин (ацетилсаліцилова кислота), парацетамол, ібупрофен. Блокують синтез простагландинів — речовин, що викликають біль і запалення.</p>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🧬</span>
+                    <h3 class="card-title">Вакцини</h3>
+                    <p class="card-text">Містять ослаблені або інактивовані патогени. Стимулюють імунну систему виробляти антитіла без розвитку хвороби. Основа профілактичної медицини.</p>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🧪 Діагностика захворювань</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p>Хімічні методи діагностики:</p>
+                        <ul>
+                            <li><strong>Аналіз крові</strong> — визначення рівня глюкози, холестерину, гемоглобіну, гормонів</li>
+                            <li><strong>Аналіз сечі</strong> — виявлення білка, цукру, кетонових тіл</li>
+                            <li><strong>Біохімічні тести</strong> — функція печінки, нирок, підшлункової залози</li>
+                            <li><strong>Імуноферментний аналіз (ІФА)</strong> — виявлення антитіл до інфекцій</li>
+                            <li><strong>ПЛР-діагностика</strong> — виявлення ДНК/РНК вірусів та бактерій</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🩹 Хімія у догляді за здоров'ям</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <ul>
+                            <li><strong>Антисептики</strong> — перекис водню (H₂O₂), спирт, хлоргексидин. Знищують мікроби на шкірі.</li>
+                            <li><strong>Дезінфектанти</strong> — хлорвмісні речовини, формальдегід для обробки приміщень та інструментів</li>
+                            <li><strong>Засоби для гігієни</strong> — мило (солі жирних кислот), шампуні, зубні пасти з фторидами</li>
+                            <li><strong>Крем і мазі</strong> — емульсії на основі жирів, гліцерину, води з додаванням активних речовин</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>💪 Спортивна фармакологія</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p>Легальні та безпечні речовини для підтримки спортивної форми:</p>
+                        <ul>
+                            <li><strong>Креатин</strong> — підвищує енергію м'язів, прискорює відновлення</li>
+                            <li><strong>Протеїн</strong> — концентрований білок для росту м'язів</li>
+                            <li><strong>Вітаміни і мінерали</strong> — підтримують метаболізм при інтенсивних навантаженнях</li>
+                            <li><strong>Електроліти</strong> — відновлюють водно-сольовий баланс після тренувань</li>
+                        </ul>
+                        <p><strong>Важливо:</strong> допінг (анаболічні стероїди) заборонені і дуже шкідливі для здоров'я!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EVERYDAY SECTION -->
+        <div class="content-section" id="everyday">
+            <h2 style="font-size: 42px; margin-bottom: 30px; text-align: center;">🏡 Хімія в побуті</h2>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <span class="card-icon">🧼</span>
+                    <h3 class="card-title">Миючі засоби</h3>
+                    <p class="card-text">Мило, порошки, рідини містять поверхнево-активні речовини (ПАР). Вони з'єднують жир і воду, дозволяючи змивати бруд. Формула: гідрофільна голова + гідрофобний хвіст.</p>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🧴</span>
+                    <h3 class="card-title">Косметика</h3>
+                    <p class="card-text">Креми, шампуні, декоративна косметика — складні хімічні композиції. Містять емульгатори, консерванти, барвники, парфуми, активні компоненти (гіалуронова кислота, вітаміни).</p>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🎨</span>
+                    <h3 class="card-title">Фарби і лаки</h3>
+                    <p class="card-text">Складаються з пігментів (колір), зв'язуючих речовин (плівкоутворювачі), розчинників. Сучасні фарби — на водній основі, екологічніші.</p>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🧹 Хімія прибирання</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <ul>
+                            <li><strong>Оцет (CH₃COOH)</strong> — слабка кислота, розчиняє накип, дезінфікує</li>
+                            <li><strong>Сода (NaHCO₃)</strong> — лужний засіб, м'який абразив, нейтралізує кислоти</li>
+                            <li><strong>Хлор (Cl₂)</strong> — потужний дезінфектант, відбілювач. Небезпечний у великих концентраціях!</li>
+                            <li><strong>Аміак (NH₃)</strong> — чистить скло, розчиняє жири. Сильний запах, токсичний</li>
+                            <li><strong>Ферментні порошки</strong> — містять біологічні каталізатори, що розщеплюють білки, жири</li>
+                        </ul>
+                        <p><strong>⚠️ Увага:</strong> Ніколи не змішуйте хлор з аміаком — утворюються токсичні гази!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🔋 Джерела енергії вдома</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <ul>
+                            <li><strong>Батарейки</strong> — хімічні джерела струму. Реакції окислення-відновлення перетворюють хімічну енергію в електричну</li>
+                            <li><strong>Акумулятори</strong> — багаторазові батарейки. Літій-іонні акумулятори в телефонах, ноутбуках</li>
+                            <li><strong>Природний газ (CH₄)</strong> — метан для опалення та приготування їжі</li>
+                            <li><strong>Бензин і дизель</strong> — суміші вуглеводнів для автомобілів</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🧊 Хімія на кухні</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p>Кулінарія — це прикладна хімія!</p>
+                        <ul>
+                            <li><strong>Випікання</strong> — сода + кислота → CO₂ (тісто підіймається)</li>
+                            <li><strong>Карамелізація</strong> — нагрівання цукру, утворення нових ароматичних сполук</li>
+                            <li><strong>Реакція Майяра</strong> — взаємодія амінокислот і цукрів при смаженні (золотиста скоринка)</li>
+                            <li><strong>Денатурація білка</strong> — варка яєць, м'яса змінює структуру білків</li>
+                            <li><strong>Емульсії</strong> — майонез (яйце + олія), молоко (жир у воді)</li>
+                            <li><strong>Желювання</strong> — желатин, пектин створюють гелі</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>👕 Текстиль і одяг</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <ul>
+                            <li><strong>Натуральні волокна:</strong> бавовна (целюлоза), вовна (кератин), шовк (фіброїн)</li>
+                            <li><strong>Синтетичні волокна:</strong> поліестер, нейлон, акрил — полімери, створені хімічним синтезом</li>
+                            <li><strong>Барвники</strong> — органічні сполуки, що зв'язуються з волокнами</li>
+                            <li><strong>Прання</strong> — ПАР у порошках видаляють бруд, відбілювачі окислюють плями</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONCLUSION SECTION -->
+        <div class="content-section" id="conclusion">
+            <h2 style="font-size: 42px; margin-bottom: 30px; text-align: center;">📊 Висновки проєкту</h2>
+
+            <div class="info-box">
+                <h3>🎯 Основні висновки</h3>
+                <p>Хімія — невід'ємна частина нашого життя. Від процесів у наших клітинах до продуктів, які ми споживаємо, від ліків, що лікують нас, до побутової хімії — всюди працюють хімічні закони та реакції.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <span class="card-icon">🌟</span>
+                    <h3 class="card-title">Універсальність</h3>
+                    <p class="card-text">Хімія присутня в усіх сферах життя: біології, медицині, харчуванні, побуті, промисловості. Це справді універсальна наука.</p>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🔬</span>
+                    <h3 class="card-title">Практичність</h3>
+                    <p class="card-text">Знання хімії допомагає приймати усвідомлені рішення про здоров'я, харчування, використання побутових засобів та вплив на довкілля.</p>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🚀</span>
+                    <h3 class="card-title">Майбутнє</h3>
+                    <p class="card-text">Розвиток хімії веде до створення нових матеріалів, ліків, екологічних технологій. Хімія формує майбутнє людства.</p>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>💡 Важливість хімічної грамотності</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p><strong>Чому важливо розуміти хімію?</strong></p>
+                        <ul>
+                            <li>Розуміння складу продуктів харчування та їх впливу на організм</li>
+                            <li>Уміння читати етикетки та розпізнавати шкідливі речовини</li>
+                            <li>Безпечне використання побутової хімії</li>
+                            <li>Усвідомлений вибір косметики та засобів догляду</li>
+                            <li>Розуміння принципів дії ліків</li>
+                            <li>Екологічна відповідальність та захист довкілля</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>⚠️ Хімічна безпека</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p><strong>Правила безпеки при роботі з хімічними речовинами:</strong></p>
+                        <ul>
+                            <li>Читайте інструкції та попередження на етикетках</li>
+                            <li>Зберігайте хімікати у недоступних для дітей місцях</li>
+                            <li>Не змішуйте різні засоби без знання хімії</li>
+                            <li>Провітрюйте приміщення при використанні сильнопахнучих речовин</li>
+                            <li>Використовуйте захисні засоби (рукавички, маски)</li>
+                            <li>Утилізуйте хімічні відходи правильно</li>
+                            <li>При отруєнні або опіках негайно зверніться до лікаря</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpand(this)">
+                    <span>🌍 Екологічні аспекти</span>
+                    <span class="expandable-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-text">
+                        <p>Хімія може бути як другом, так і ворогом довкілля:</p>
+                        <ul>
+                            <li><strong>Проблеми:</strong> забруднення води ПАР, викиди CO₂, пластикові відходи</li>
+                            <li><strong>Рішення:</strong> біорозкладні матеріали, зелена хімія, альтернативна енергетика</li>
+                            <li><strong>Що можемо робити ми:</strong> використовувати еко-продукти, сортувати сміття, економити ресурси</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3)); border-left-color: #667eea;">
+                <h3>📚 Підсумок</h3>
+                <p>Хімія — це не лише формули та реакції в підручниках. Це живе знання, яке щодня супроводжує нас, впливає на наше здоров'я, комфорт та якість життя. Розуміння основ хімії робить нас більш свідомими споживачами, дозволяє дбати про власне здоров'я та здоров'я нашої планети.</p>
+                <p style="margin-top: 15px;"><strong>Хімія — це наука життя, і життя — це безперервна хімія! ⚗️</strong></p>
+            </div>
+
+            <div class="stats-container" style="margin-top: 50px;">
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">життя — це хімія</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">хімічних реакцій у тілі щосекунди</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">хімія працює навколо нас</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>⚗️ Проєкт "Хімія і життя людини" • 2025</p>
+            <p style="margin-top: 10px; opacity: 0.6;">Інтерактивний освітній проєкт про роль хімії в повсякденному житті</p>
+        </footer>
+    </div>
+
+    <script>
+        // Create animated particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Show section function
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle expandable sections
+        function toggleExpand(element) {
+            const expandable = element.parentElement;
+            expandable.classList.toggle('open');
+        }
+
+        // Initialize particles on page load
+        window.addEventListener('load', createParticles);
+
+        // Add smooth hover effects to cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px) scale(1.02)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+    </script>
+</body>
+</html>
